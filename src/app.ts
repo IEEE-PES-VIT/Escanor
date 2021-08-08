@@ -1,15 +1,29 @@
 import express, { Request, Response, NextFunction } from "express";
 import morgan from "./logger/morgan";
 require("dotenv-save").config();
+import { Server } from "socket.io";
+import http from "http";
 
 const app = express();
-app.use(express.json());
+
+const server = http.createServer(app);
 
 // Connect to database here
 import { initializeRedis } from "./config/redis";
 initializeRedis();
 
+// Socket Io connection
+const io = new Server(server);
+
+io.on("connect", (socket) => {
+  socket.on("start", () => {
+    console.log("Socket Connection Established!");
+  });
+});
+
 // use all the middlewires
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Logging
 app.use(morgan);
@@ -48,6 +62,6 @@ app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
 
 const port = process.env.PORT || 3003;
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Listening on http://localhost:${port} 🚀`);
 });
