@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Arkaraj/Escanor#readme",
   "dependencies": {
     "dotenv-save": "^1.2.0",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "redis": "^3.1.2",

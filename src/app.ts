@@ -13,30 +13,29 @@ import { initializeRedis } from "./config/redis";
 initializeRedis();
 
 // Socket Io connection
-const io = new Server(server);
+export const io = new Server(server);
 
-io.on("connect", (socket) => {
+io.on("connection", (socket) => {
   socket.on("start", () => {
     console.log("Socket Connection Established!");
   });
 });
 
 // use all the middlewires
+app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Logging
-app.use(morgan);
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan);
+}
 
 //Importing routes
-import initialRoutes from "./routes/initial.routes";
+import chatRoutes from "./routes/chat.routes";
 
 //Routes
-app.use("api/v1/initial", initialRoutes);
-
-app.get("/", (_req, res) => {
-  res.send("Escanor Testing");
-});
+app.use("/", chatRoutes);
 
 app.get("/api/v1", (_req, res) => {
   res.json({

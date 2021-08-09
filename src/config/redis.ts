@@ -8,6 +8,7 @@ const client = redis.createClient();
  * Initializes Redis connection using configs and logs status
  */
 const initializeRedis = () => {
+  // Testing out
   client.set("status", "server up");
   client.get("status", (err: any) => {
     if (err) {
